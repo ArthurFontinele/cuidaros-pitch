@@ -484,48 +484,174 @@
   .reveal .controls { color: var(--ink-2); }
   .reveal .slide-number { color: var(--ink-3); background: transparent; font-family: 'Inter', sans-serif; font-size: 0.7em; letter-spacing: 0.1em; }
 
-  /* Mobile responsive */
+  /* ===== MOBILE OPTIMIZATION ===== */
   @media (max-width: 900px) {
     .grid-2, .grid-3, .grid-4, .pricing, .steps {
       grid-template-columns: 1fr;
-      gap: 1em;
+      gap: 0.9em;
     }
-    .reveal .slides section { padding: 1.2rem 1rem; }
-    .brand-foot { font-size: 0.55rem; letter-spacing: 0.2em; }
-    .cover { min-height: 70vh; }
-    blockquote { font-size: clamp(1.1rem, 5vw, 1.6rem); }
-    .eyebrow { letter-spacing: 0.2em; margin-bottom: 1.2em; }
-    .reveal .controls { display: none; }
+    .reveal .slides section {
+      padding: 1.4rem 1.1rem 4.5rem 1.1rem;
+    }
+    .brand-foot {
+      font-size: 0.52rem;
+      letter-spacing: 0.18em;
+      bottom: 0.7rem;
+      left: 1.1rem;
+      right: 1.1rem;
+    }
+    .cover { min-height: 78vh; }
+    .cover .meta { margin-top: 2em; }
+    blockquote { font-size: clamp(1.05rem, 5.5vw, 1.6rem); line-height: 1.35; }
+    .eyebrow {
+      letter-spacing: 0.18em;
+      margin-bottom: 1.1em;
+      font-size: 0.62rem;
+    }
+    .eyebrow::after { max-width: 40px; }
+    .reveal h1 { font-size: clamp(2rem, 9vw, 3rem); }
+    .reveal h2 { font-size: clamp(1.4rem, 6vw, 2rem); }
+    .stat { font-size: clamp(3rem, 14vw, 4.2rem); }
+    .cta .ask { font-size: clamp(2.6rem, 12vw, 4rem); }
+    .cta .closing { font-size: clamp(1.1rem, 4.5vw, 1.5rem); margin-top: 1.5em; }
   }
 
   @media (max-width: 600px) {
+    .reveal { font-size: 17px; }
     .reveal .progress { height: 2px; }
-    .funnel .layer { padding: 0.9em 1em; }
-    .card { padding: 1em; }
-    .persona { padding: 1em; }
-    .plan { padding: 1em; }
-    .step { padding: 0.9em; }
+    .reveal .controls { display: none !important; }
+    .funnel .layer { padding: 0.8em 0.9em; }
+    .funnel .layer .val { font-size: clamp(1.1rem, 5vw, 1.4rem); }
+    .card, .persona, .plan, .step { padding: 0.95em; }
+    .cover .logo { font-size: 0.72rem; letter-spacing: 0.32em; margin-bottom: 1.3em; }
+    .cover h1 { font-size: clamp(1.9rem, 9.5vw, 2.6rem); }
+    .cover .sub { font-size: 0.92rem; margin-top: 1.2em; }
+    .cover .meta { font-size: 0.58rem; letter-spacing: 0.22em; }
+    .cover-rule { margin: 1.5em 0 1.2em 0; }
+    .reveal ul li { padding: 0.6em 0 0.6em 1.6em; font-size: 0.92rem; }
+    .reveal ul li::before { top: 1em; width: 1em; }
+    .persona .marker { width: 30px; height: 30px; font-size: 0.95em; margin-bottom: 0.7em; }
+    .plan .price { font-size: clamp(1.6rem, 8vw, 2.1rem); }
+    .step .num { font-size: clamp(1.2rem, 6vw, 1.5rem); }
+    blockquote::before, blockquote::after { font-size: 1.2em; }
+    .quote-attr { font-size: 0.7rem; letter-spacing: 0.04em; }
+  }
+
+  /* Modo mobile: slides flow naturalmente, sem fit forçado */
+  body.mobile-mode .reveal,
+  body.mobile-mode .reveal .slides,
+  body.mobile-mode .reveal .slides section {
+    height: auto !important;
+    min-height: 100vh;
+    width: 100% !important;
+    transform: none !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+  body.mobile-mode .reveal .slides section {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-start !important;
+    padding-top: 2rem !important;
+    padding-bottom: 5rem !important;
+  }
+  body.mobile-mode .reveal .slides {
+    pointer-events: auto;
   }
 
   /* Disable element animations — tudo aparece de uma vez */
   .reveal .fragment { opacity: 1 !important; visibility: visible !important; transform: none !important; }
   section > * { animation: none !important; }
 
-  /* Touch-friendly nav hint para mobile */
+  /* Barra de navegação inferior fixa em mobile */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(10, 20, 38, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--rule);
+    z-index: 9999;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.2rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-nav button {
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-1);
+    width: 44px;
+    height: 38px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  .mobile-nav button:active {
+    background: rgba(200, 153, 104, 0.15);
+    border-color: var(--bronze);
+  }
+  .mobile-nav .counter {
+    color: var(--ink-2);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    font-weight: 600;
+  }
+  .mobile-nav .counter span { color: var(--bronze); }
+
+  @media (max-width: 900px), (hover: none) and (pointer: coarse) {
+    .mobile-nav { display: flex; }
+    body { padding-bottom: 56px; }
+  }
+
+  /* Tap hint inicial */
+  .tap-hint {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 20, 38, 0.92);
+    color: var(--ink-1);
+    padding: 1.2em 1.6em;
+    border-radius: 8px;
+    border: 1px solid var(--bronze);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    z-index: 10000;
+    text-align: center;
+    pointer-events: none;
+    animation: fade-out 4s ease forwards;
+  }
+  .tap-hint .arrow { color: var(--bronze); font-size: 1.4em; }
+  @keyframes fade-out {
+    0%, 60% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
+  }
   @media (hover: none) and (pointer: coarse) {
-    body::after {
-      content: "← deslize →";
-      position: fixed;
-      bottom: 6px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--ink-3);
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      font-family: 'Inter', sans-serif;
-      pointer-events: none;
-      z-index: 1000;
-    }
+    .tap-hint { display: block; }
+  }
+
+  /* Garante que tudo cabe em portrait extremo */
+  @media (max-width: 380px) {
+    .reveal { font-size: 16px; }
+    .reveal .slides section { padding: 1.2rem 0.9rem 4.5rem 0.9rem; }
+    .reveal h1 { font-size: 1.8rem; }
+    .reveal h2 { font-size: 1.3rem; }
+    .stat { font-size: 2.8rem; }
+    .cta .ask { font-size: 2.4rem; }
   }
 </style>
 </head>
@@ -829,27 +955,91 @@
   </div>
 </div>
 
+<!-- Navegação fixa para mobile -->
+<nav class="mobile-nav" aria-label="Navegação dos slides">
+  <button id="navPrev" aria-label="Slide anterior">‹</button>
+  <div class="counter"><span id="navCurrent">1</span> / <span id="navTotal">10</span></div>
+  <button id="navNext" aria-label="Próximo slide">›</button>
+</nav>
+
+<!-- Dica visual para primeira visita no celular -->
+<div class="tap-hint">
+  <div class="arrow">← deslize →</div>
+  <div style="margin-top:0.4em; opacity:0.7;">ou use os botões abaixo</div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
 <script>
+  const isMobile = window.matchMedia('(max-width: 900px), (hover: none) and (pointer: coarse)').matches;
+
+  if (isMobile) {
+    document.body.classList.add('mobile-mode');
+  }
+
   Reveal.initialize({
     hash: true,
-    controls: true,
+    controls: !isMobile,
     progress: true,
     center: false,
-    transition: 'slide',
+    transition: isMobile ? 'none' : 'slide',
     transitionSpeed: 'default',
     backgroundTransition: 'fade',
     slideNumber: false,
-    overview: true,
+    overview: !isMobile,
     keyboard: true,
     touch: true,
-    width: 1280,
-    height: 800,
-    margin: 0.05,
-    minScale: 0.2,
-    maxScale: 2.0,
+    width: isMobile ? '100%' : 1280,
+    height: isMobile ? '100%' : 800,
+    margin: isMobile ? 0 : 0.05,
+    minScale: isMobile ? 1 : 0.2,
+    maxScale: isMobile ? 1 : 2.0,
+    disableLayout: isMobile,
     plugins: [ RevealNotes ]
+  }).then(() => {
+    const total = Reveal.getTotalSlides();
+    document.getElementById('navTotal').textContent = total;
+    const updateCounter = () => {
+      const idx = Reveal.getIndices();
+      document.getElementById('navCurrent').textContent = (idx.h + 1);
+    };
+    Reveal.on('slidechanged', updateCounter);
+    updateCounter();
+
+    document.getElementById('navPrev').addEventListener('click', e => {
+      e.preventDefault(); Reveal.left();
+    });
+    document.getElementById('navNext').addEventListener('click', e => {
+      e.preventDefault(); Reveal.right();
+    });
+
+    // Em mobile-mode, intercepta scroll para mudar slide quando chega no fim
+    if (isMobile) {
+      let lastScrollAt = 0;
+      const slidesEl = document.querySelector('.reveal .slides');
+      slidesEl.style.height = 'auto';
+
+      // Garante que cada slide ocupe ao menos a viewport e haja transição visual ao trocar
+      document.querySelectorAll('.reveal .slides section').forEach(sec => {
+        sec.style.minHeight = '100vh';
+      });
+    }
+  });
+
+  // Esconde a dica após primeira interação
+  let hintHidden = false;
+  ['touchstart', 'click', 'keydown'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      if (hintHidden) return;
+      const hint = document.querySelector('.tap-hint');
+      if (hint) hint.style.display = 'none';
+      hintHidden = true;
+    }, { once: true });
+  });
+
+  // Atualiza a viewport corretamente em rotação de celular
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => Reveal.layout(), 200);
   });
 </script>
 
