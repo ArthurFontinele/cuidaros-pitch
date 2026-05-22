@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CuidarOS — a infraestrutura digital do cuidado domiciliar</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-0: #0a0e1a;
+    --bg-1: #0f172a;
+    --bg-2: #1e293b;
+    --ink-0: #f8fafc;
+    --ink-1: #e2e8f0;
+    --ink-2: #94a3b8;
+    --ink-3: #64748b;
+    --teal: #2dd4bf;
+    --teal-deep: #0d9488;
+    --coral: #fb923c;
+    --coral-soft: #fed7aa;
+    --rose: #f472b6;
+    --rule: rgba(255,255,255,0.08);
+  }
+
+  html, body { height: 100%; background: var(--bg-0); }
+
+  .reveal {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink-1);
+    font-weight: 400;
+    font-size: 26px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .reveal .slides { text-align: left; }
+  .reveal .slides section { padding: 1rem 2rem; }
+
+  /* Tipografia */
+  .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+    font-family: 'Fraunces', Georgia, serif;
+    color: var(--ink-0);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-transform: none;
+    margin: 0 0 1.2rem 0;
+  }
+  .reveal h1 { font-size: 4.6em; font-weight: 700; }
+  .reveal h2 { font-size: 2.4em; font-weight: 600; }
+  .reveal h3 { font-size: 1.6em; font-weight: 500; color: var(--ink-1); }
+  .reveal h4 { font-size: 1.1em; font-weight: 500; color: var(--teal); text-transform: uppercase; letter-spacing: 0.16em; font-family: 'Inter', sans-serif; }
+
+  .reveal p { color: var(--ink-1); line-height: 1.55; margin: 0 0 0.8em 0; }
+  .reveal strong { color: var(--ink-0); font-weight: 600; }
+  .reveal em { color: var(--coral); font-style: normal; font-weight: 500; }
+
+  /* Backgrounds (sobrescritos por slide via data-background) */
+  .reveal .backgrounds {
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(45, 212, 191, 0.10), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 90%, rgba(251, 146, 60, 0.08), transparent 60%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1));
+  }
+
+  /* Eyebrow / chip */
+  .eyebrow {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62em;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--teal);
+    padding: 0.4em 1em;
+    border: 1px solid rgba(45, 212, 191, 0.3);
+    border-radius: 999px;
+    background: rgba(45, 212, 191, 0.06);
+    margin-bottom: 1.5em;
+  }
+
+  /* Layout helpers */
+  .stack > * + * { margin-top: 1.2em; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.2em; align-items: start; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.6em; align-items: start; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2em; align-items: start; }
+  .center { text-align: center; }
+
+  /* Big number / stat */
+  .stat {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 6em;
+    line-height: 0.95;
+    background: linear-gradient(135deg, var(--teal) 0%, var(--coral) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+  }
+  .stat-label {
+    color: var(--ink-2);
+    font-size: 0.82em;
+    line-height: 1.45;
+    margin-top: 0.4em;
+  }
+
+  /* Cards */
+  .card {
+    background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    padding: 1.4em 1.4em;
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s ease, border-color 0.4s ease;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(45, 212, 191, 0.4); }
+  .card .icon { font-size: 1.8em; margin-bottom: 0.5em; }
+  .card h3 { color: var(--ink-0); font-family: 'Inter', sans-serif; font-size: 1.15em; font-weight: 600; margin-bottom: 0.5em; }
+  .card p { color: var(--ink-2); font-size: 0.85em; margin: 0; }
+
+  .card.accent { border-color: rgba(45, 212, 191, 0.35); background: linear-gradient(160deg, rgba(45, 212, 191, 0.10), rgba(45, 212, 191, 0.02)); }
+  .card.warm   { border-color: rgba(251, 146, 60, 0.30); background: linear-gradient(160deg, rgba(251, 146, 60, 0.10), rgba(251, 146, 60, 0.02)); }
+
+  /* Bullets */
+  .reveal ul { list-style: none; padding: 0; margin: 0; }
+  .reveal ul li {
+    position: relative;
+    padding: 0.55em 0 0.55em 1.8em;
+    line-height: 1.5;
+    border-bottom: 1px solid var(--rule);
+  }
+  .reveal ul li:last-child { border-bottom: none; }
+  .reveal ul li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 1em;
+    width: 1em; height: 1px;
+    background: var(--teal);
+  }
+
+  /* Quote */
+  blockquote {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6em;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink-0);
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-style: italic;
+  }
+  blockquote::before { content: "“"; color: var(--coral); font-size: 1.6em; line-height: 0; vertical-align: -0.3em; margin-right: 0.05em; }
+  blockquote::after { content: "”"; color: var(--coral); font-size: 1.6em; line-height: 0; vertical-align: -0.55em; }
+  .quote-attr { color: var(--ink-2); font-size: 0.55em; margin-top: 1em; font-style: normal; font-family: 'Inter', sans-serif; }
+
+  /* Capa */
+  .cover { display: flex; flex-direction: column; justify-content: center; min-height: 80vh; }
+  .cover .logo {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 0.9em;
+    letter-spacing: 0.3em;
+    color: var(--teal);
+    margin-bottom: 1.6em;
+  }
+  .cover h1 .accent { color: var(--coral); font-style: italic; font-weight: 700; }
+  .cover .sub { color: var(--ink-2); font-size: 1.1em; margin-top: 1.2em; max-width: 720px; }
+  .cover .meta { color: var(--ink-3); font-size: 0.7em; margin-top: 2.4em; letter-spacing: 0.08em; }
+
+  /* Funil */
+  .funnel { display: flex; flex-direction: column; align-items: center; gap: 0.8em; }
+  .funnel .layer {
+    padding: 1em 1.4em;
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(45, 212, 191, 0.15), rgba(45, 212, 191, 0.05));
+    border: 1px solid rgba(45, 212, 191, 0.25);
+    text-align: center;
+    min-width: 60%;
+  }
+  .funnel .layer.t { min-width: 90%; background: linear-gradient(180deg, rgba(45, 212, 191, 0.10), rgba(45, 212, 191, 0.02)); }
+  .funnel .layer.s { min-width: 70%; background: linear-gradient(180deg, rgba(251, 146, 60, 0.12), rgba(251, 146, 60, 0.04)); border-color: rgba(251, 146, 60, 0.25); }
+  .funnel .layer.so { min-width: 50%; background: linear-gradient(180deg, rgba(251, 146, 60, 0.25), rgba(251, 146, 60, 0.10)); border-color: rgba(251, 146, 60, 0.5); }
+  .funnel .layer .tag { font-family: 'Inter', sans-serif; font-size: 0.72em; color: var(--teal); letter-spacing: 0.18em; text-transform: uppercase; }
+  .funnel .layer.s .tag, .funnel .layer.so .tag { color: var(--coral); }
+  .funnel .layer .val { font-family: 'Fraunces', serif; font-size: 1.7em; color: var(--ink-0); font-weight: 600; margin-top: 0.2em; }
+  .funnel .layer .desc { font-size: 0.7em; color: var(--ink-2); margin-top: 0.3em; }
+
+  /* Tabela de planos */
+  .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; }
+  .plan { padding: 1.6em 1.4em; border-radius: 18px; background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid var(--rule); }
+  .plan.featured { border-color: var(--teal); background: linear-gradient(160deg, rgba(45, 212, 191, 0.12), rgba(45, 212, 191, 0.02)); transform: scale(1.04); position: relative; }
+  .plan.featured::after { content: "Mais popular"; position: absolute; top: -10px; right: 12px; font-size: 0.55em; padding: 0.25em 0.8em; background: var(--teal); color: var(--bg-0); border-radius: 999px; letter-spacing: 0.1em; font-weight: 700; }
+  .plan .name { font-size: 0.8em; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-2); }
+  .plan .price { font-family: 'Fraunces', serif; font-size: 2.4em; color: var(--ink-0); margin-top: 0.2em; font-weight: 600; }
+  .plan .price small { font-size: 0.4em; color: var(--ink-2); font-family: 'Inter', sans-serif; font-weight: 400; }
+  .plan .seats { color: var(--ink-2); font-size: 0.85em; margin-top: 0.4em; }
+
+  /* Fluxo */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2em; position: relative; }
+  .step { padding: 1.2em 1em; background: rgba(255,255,255,0.025); border: 1px solid var(--rule); border-radius: 14px; }
+  .step .num { font-family: 'Fraunces', serif; font-size: 2em; color: var(--teal); line-height: 1; font-weight: 600; }
+  .step .ttl { color: var(--ink-0); font-weight: 600; margin-top: 0.4em; font-size: 0.95em; }
+  .step .dsc { color: var(--ink-2); font-size: 0.78em; margin-top: 0.3em; line-height: 1.4; }
+
+  /* Personas */
+  .persona { padding: 1.6em 1.2em; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--rule); }
+  .persona .avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--coral)); display: flex; align-items: center; justify-content: center; font-size: 1.4em; margin-bottom: 0.8em; }
+  .persona .role { font-size: 0.7em; color: var(--teal); letter-spacing: 0.18em; text-transform: uppercase; }
+  .persona .name { font-family: 'Fraunces', serif; font-size: 1.4em; color: var(--ink-0); margin-top: 0.2em; }
+  .persona .pain { color: var(--ink-2); font-size: 0.85em; margin-top: 0.6em; line-height: 1.45; }
+
+  /* Slide finder / contagem */
+  .slide-num { position: absolute; bottom: 1.5rem; right: 2rem; font-size: 0.6em; color: var(--ink-3); letter-spacing: 0.2em; }
+
+  /* CTA final */
+  .cta { text-align: center; padding: 2em 0; }
+  .cta .ask { font-family: 'Fraunces', serif; font-size: 5em; line-height: 1; color: var(--ink-0); font-weight: 700; }
+  .cta .ask .accent { color: var(--coral); }
+  .cta .label { color: var(--ink-2); margin-top: 0.6em; }
+
+  /* Animations */
+  @keyframes float-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal section.present > *:not(.slide-num) { animation: float-in 0.6s ease both; }
+  .reveal section.present h1 { animation-delay: 0.05s; }
+  .reveal section.present h2 { animation-delay: 0.05s; }
+
+  /* Fragment customization */
+  .reveal .fragment.fade-in-then-out { opacity: 1; }
+  .reveal .fragment { transition: all 0.5s ease; }
+
+  /* Footer brand */
+  .brand-foot { position: absolute; bottom: 1.4rem; left: 2rem; font-size: 0.55em; letter-spacing: 0.3em; color: var(--ink-3); text-transform: uppercase; font-weight: 600; }
+  .brand-foot span { color: var(--teal); }
+
+  /* Underline accent */
+  .ul-accent { background: linear-gradient(180deg, transparent 60%, rgba(251, 146, 60, 0.35) 60%); padding: 0 0.1em; }
+
+  /* Refeicao em telas pequenas */
+  @media (max-width: 900px) {
+    .grid-2, .grid-3, .grid-4, .pricing, .steps { grid-template-columns: 1fr; }
+  }
+
+  /* Progress bar custom */
+  .reveal .progress { color: var(--teal); height: 4px; }
+
+  /* Controls */
+  .reveal .controls { color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+    <!-- SLIDE 1: CAPA -->
+    <section data-transition="fade">
+      <div class="cover">
+        <div class="logo">⌬ CUIDAR<span style="color: var(--coral);">OS</span></div>
+        <h1>Quem cuida<br><span class="accent">de quem cuida?</span></h1>
+        <p class="sub">A infraestrutura digital para microempresas de cuidado domiciliar no Brasil.</p>
+        <p class="meta">PITCH SEED · MAIO 2026 · SÃO LUÍS, MA</p>
+      </div>
+      <div class="brand-foot"><span>01</span> / 10 · ABERTURA</div>
+      <aside class="notes">
+        Boa tarde. Antes de eu falar de tecnologia, eu queria fazer uma pergunta. Quem aqui já precisou contratar um cuidador para um pai, uma mãe, uma avó? Quem fez isso sabe que essa contratação acontece no improviso: grupo de WhatsApp, indicação de vizinha, planilha no Excel. É um setor de 22 milhões de idosos no Brasil — segundo o Censo de 2022 — e que cresceu 57% em uma década. Mas é um setor que, do ponto de vista de dados, é praticamente invisível.
+      </aside>
+    </section>
+
+    <!-- SLIDE 2: O PROBLEMA -->
+    <section>
+      <div class="eyebrow">O Problema</div>
+      <h2>O setor que sustenta o Brasil envelhecido<br>opera <span class="ul-accent">no improviso</span>.</h2>
+      <div class="grid-3" style="margin-top: 2em;">
+        <div class="card warm fragment fade-up">
+          <div class="icon">💬</div>
+          <h3>WhatsApp</h3>
+          <p>Plantões e ocorrências negociadas em grupos. Histórico se perde nas mensagens.</p>
+        </div>
+        <div class="card warm fragment fade-up">
+          <div class="icon">📊</div>
+          <h3>Planilhas paralelas</h3>
+          <p>Cada gestor mantém o próprio Excel. Sem fonte única de verdade.</p>
+        </div>
+        <div class="card warm fragment fade-up">
+          <div class="icon">📓</div>
+          <h3>Caderno na bolsa</h3>
+          <p>Anotações de medicação, horas trabalhadas e pagamentos em papel.</p>
+        </div>
+      </div>
+      <p class="fragment fade-up" style="margin-top: 2em; color: var(--ink-2); font-size: 0.9em;">
+        Sem registro, não há rastreabilidade. <strong>Sem rastreabilidade, não há escala.</strong>
+      </p>
+      <div class="brand-foot"><span>02</span> / 10 · PROBLEMA</div>
+      <aside class="notes">
+        O problema é simples de enunciar e brutal na prática. Pequenas empresas que intermediam cuidado domiciliar não têm sistema. Elas operam em WhatsApp, planilha e caderno. Quando uma cuidadora falta, o gestor descobre às seis da manhã. Quando o paciente troca de cuidador, o histórico clínico evapora. Quando chega o fim do mês, ninguém sabe direito quem trabalhou quantas horas. Sem registro, não tem escala. Sem escala, não tem crescimento.
+      </aside>
+    </section>
+
+    <!-- SLIDE 3: A CITAÇÃO -->
+    <section data-background-gradient="linear-gradient(135deg, #0f172a 0%, #134e4a 100%)">
+      <div style="max-width: 1000px; margin: 0 auto; padding-top: 3em;">
+        <div class="eyebrow">Adriano, AM Consultoria</div>
+        <blockquote>
+          Hoje, se uma cuidadora falta, eu descubro pelo grupo do WhatsApp às seis da manhã, ligo para outras três e rezo para alguém aceitar o plantão.
+        </blockquote>
+        <p class="quote-attr">Entrevista ao grupo · São Luís, MA · 2026</p>
+      </div>
+      <div class="brand-foot"><span>03</span> / 10 · A DOR REAL</div>
+      <aside class="notes">
+        Não estou inventando esse problema. Essa é a fala literal do Adriano, fundador da AM Consultoria, em São Luís. É a microoperação dele que a gente vai usar como caso ao longo desta apresentação.
+      </aside>
+    </section>
+
+    <!-- SLIDE 4: QUEM SENTE A DOR -->
+    <section>
+      <div class="eyebrow">Quem sente</div>
+      <h2>Três pessoas pagam essa conta.</h2>
+      <div class="grid-3" style="margin-top: 2em;">
+        <div class="persona fragment fade-up">
+          <div class="avatar">👔</div>
+          <div class="role">Gestor</div>
+          <div class="name">Adriano</div>
+          <p class="pain">Perde <strong>20 h/semana</strong> coordenando escala manualmente. Cresce, mas não consegue escalar.</p>
+        </div>
+        <div class="persona fragment fade-up">
+          <div class="avatar">🩺</div>
+          <div class="role">Cuidadora</div>
+          <div class="name">Dona Maria</div>
+          <p class="pain">Não consegue <strong>comprovar horas trabalhadas</strong>. Pagamento depende da memória do gestor.</p>
+        </div>
+        <div class="persona fragment fade-up">
+          <div class="avatar">🏠</div>
+          <div class="role">Família</div>
+          <div class="name">Filhos a distância</div>
+          <p class="pain">Pagam sem ver <strong>nenhum relatório</strong> do cuidado que a mãe está recebendo.</p>
+        </div>
+      </div>
+      <div class="brand-foot"><span>04</span> / 10 · IMPACTO</div>
+      <aside class="notes">
+        Três pessoas pagam essa conta. O gestor — eu conversei com o Adriano, fundador da AM Consultoria, em São Luís, e ele perde cerca de 20 horas por semana só coordenando escala. A cuidadora, que muitas vezes não consegue comprovar formalmente as horas que trabalhou. E a família, que paga e nunca recebe um relatório claro do que foi feito com a mãe ou com o pai dela. Três dores, um mesmo problema de base: a ausência de dados estruturados.
+      </aside>
+    </section>
+
+    <!-- SLIDE 5: SOLUÇÃO -->
+    <section data-background-gradient="radial-gradient(ellipse at 70% 30%, rgba(45,212,191,0.15), transparent 60%), linear-gradient(180deg, #0a0e1a, #0f172a)">
+      <div class="eyebrow">A solução</div>
+      <h1 style="font-size: 3.6em;">A <span style="color: var(--teal);">primeira camada</span><br>de visibilidade do<br>cuidado domiciliar.</h1>
+      <p style="color: var(--ink-2); font-size: 1.05em; max-width: 760px; margin-top: 1.5em;">
+        <strong style="color: var(--coral); font-family: 'Inter', sans-serif; letter-spacing: 0.1em;">CUIDAROS</strong> &nbsp;·&nbsp; cadastro unificado, escala inteligente, prontuário contínuo e pagamento automático em uma plataforma SaaS pensada para microempresas.
+      </p>
+      <div class="brand-foot"><span>05</span> / 10 · SOLUÇÃO</div>
+      <aside class="notes">
+        É aí que entra a CuidarOS. A gente é a infraestrutura digital do cuidado domiciliar. Em uma única plataforma, a empresa cadastra cuidadores, pacientes e responsáveis, monta a escala de plantões, registra o prontuário contínuo do paciente — independentemente de qual cuidadora está em serviço — e fecha o pagamento no fim do mês em dois cliques. Não é uma planilha melhorada. É a primeira vez que essa operação fica realmente legível.
+      </aside>
+    </section>
+
+    <!-- SLIDE 6: COMO FUNCIONA -->
+    <section>
+      <div class="eyebrow">Como funciona</div>
+      <h2>Quatro etapas. <span style="color: var(--coral);">O que hoje toma quatro dias.</span></h2>
+      <div class="steps" style="margin-top: 2em;">
+        <div class="step fragment fade-up">
+          <div class="num">01</div>
+          <div class="ttl">Cadastra</div>
+          <div class="dsc">Pessoas e papéis (cuidador, responsável, paciente) em entidades separadas, sem duplicação.</div>
+        </div>
+        <div class="step fragment fade-up">
+          <div class="num">02</div>
+          <div class="ttl">Escala</div>
+          <div class="dsc">Contratos mensais e plantões diários com encaixe automático e alerta de cobertura.</div>
+        </div>
+        <div class="step fragment fade-up">
+          <div class="num">03</div>
+          <div class="ttl">Executa</div>
+          <div class="dsc">Cuidadora registra o turno no celular: medicação, intercorrências, sinais vitais.</div>
+        </div>
+        <div class="step fragment fade-up">
+          <div class="num">04</div>
+          <div class="ttl">Fecha</div>
+          <div class="dsc">Pagamento consolidado para a cuidadora, relatório enviado para a família.</div>
+        </div>
+      </div>
+      <div class="brand-foot"><span>06</span> / 10 · PRODUTO</div>
+      <aside class="notes">
+        O fluxo é direto. Primeiro, a empresa cadastra as pessoas — e a gente fez questão de tratar pessoa e papel separadamente, porque na vida real a mesma sobrinha pode ser cuidadora hoje e responsável amanhã. Em seguida, monta a escala. Durante a execução, a cuidadora abre o aplicativo, registra o turno e anota o que aconteceu — medicação, intercorrência, sinal vital. No fim do mês, o sistema consolida tudo: pagamento da cuidadora e relatório enviado para a família. Quatro etapas. O que hoje toma quatro dias.
+      </aside>
+    </section>
+
+    <!-- SLIDE 7: MERCADO -->
+    <section>
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow">Mercado</div>
+          <h2>Um setor enorme. <br>E quase invisível para a tecnologia.</h2>
+          <div class="stat fragment fade-up" style="margin-top: 1.2em;">22 mi</div>
+          <p class="stat-label">de idosos no Brasil em 2022 — crescimento de <strong style="color: var(--coral);">57% em uma década</strong>. <br><span style="font-size: 0.7em; color: var(--ink-3);">Fonte: IBGE, Censo Demográfico 2022.</span></p>
+        </div>
+        <div class="funnel">
+          <div class="layer t fragment fade-left">
+            <div class="tag">TAM</div>
+            <div class="val">22 mi idosos</div>
+            <div class="desc">população-alvo final de cuidado</div>
+          </div>
+          <div class="layer s fragment fade-left">
+            <div class="tag">SAM</div>
+            <div class="val">~R$ 25 bi/ano</div>
+            <div class="desc">setor de home care no Brasil</div>
+          </div>
+          <div class="layer so fragment fade-left">
+            <div class="tag">SOM</div>
+            <div class="val">12 mil empresas</div>
+            <div class="desc">microempresas — alvo dos 3 primeiros anos</div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-foot"><span>07</span> / 10 · MERCADO</div>
+      <aside class="notes">
+        Sobre tamanho de mercado. O Brasil tem 22 milhões de idosos. O setor de home care movimenta cerca de 25 bilhões de reais por ano. Mas a gente não vai vender para 22 milhões de idosos. A gente vende para as empresas que organizam esse cuidado — e existem cerca de 12 mil delas no país. Esse é o nosso alvo nos três primeiros anos.
+      </aside>
+    </section>
+
+    <!-- SLIDE 8: MODELO DE NEGÓCIO -->
+    <section>
+      <div class="eyebrow">Modelo de negócio</div>
+      <h2>SaaS mensal por <span style="color: var(--teal);">nº de cuidadores ativos</span>.</h2>
+      <div class="pricing" style="margin-top: 2em;">
+        <div class="plan fragment fade-up">
+          <div class="name">Starter</div>
+          <div class="price">R$ 199<small> /mês</small></div>
+          <div class="seats">até 10 cuidadores</div>
+          <ul style="margin-top: 1em;">
+            <li>Escala e prontuário</li>
+            <li>Suporte por e-mail</li>
+          </ul>
+        </div>
+        <div class="plan featured fragment fade-up">
+          <div class="name">Pro</div>
+          <div class="price">R$ 499<small> /mês</small></div>
+          <div class="seats">até 30 cuidadores</div>
+          <ul style="margin-top: 1em;">
+            <li>Relatórios para famílias</li>
+            <li>Pagamentos automáticos</li>
+            <li>Suporte prioritário</li>
+          </ul>
+        </div>
+        <div class="plan fragment fade-up">
+          <div class="name">Enterprise</div>
+          <div class="price">sob consulta</div>
+          <div class="seats">acima de 30 + integrações</div>
+          <ul style="margin-top: 1em;">
+            <li>Folha &amp; contabilidade</li>
+            <li>Multiunidades</li>
+            <li>Onboarding dedicado</li>
+          </ul>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 1.6em; color: var(--ink-2); font-size: 0.9em;">
+        Ticket médio projetado: <strong style="color: var(--coral);">R$ 380/empresa/mês</strong>.
+      </p>
+      <div class="brand-foot"><span>08</span> / 10 · NEGÓCIO</div>
+      <aside class="notes">
+        O modelo é SaaS, com cobrança mensal por empresa, escalonada pelo número de cuidadores ativos. A gente entra com um plano starter de 199 reais para empresas com até 10 cuidadores, um plano pro a 499 para empresas com até 30, e um enterprise sob consulta para quem precisa de integração com folha, contabilidade ou operadora de saúde. Ticket médio projetado: 380 reais por empresa por mês.
+      </aside>
+    </section>
+
+    <!-- SLIDE 9: TIME + VALIDAÇÃO -->
+    <section>
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow">Validação</div>
+          <h2>O que a gente já fez.</h2>
+          <ul style="margin-top: 1.5em;">
+            <li class="fragment fade-right">Entrevistas em profundidade com o gestor da AM Consultoria.</li>
+            <li class="fragment fade-right">Modelagem conceitual de dados validada contra o caso real.</li>
+            <li class="fragment fade-right">Próximos 90 dias: piloto com <strong style="color: var(--coral);">3 empresas em São Luís</strong>.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="eyebrow">Time</div>
+          <h2>Quem está atrás disso.</h2>
+          <div style="margin-top: 1.5em;">
+            <div class="card accent" style="margin-bottom: 0.8em;">
+              <h3>Arthur Fontinele</h3>
+              <p>Engenharia de Software · modelagem de dados e produto</p>
+            </div>
+            <div class="card">
+              <h3>Luiz, Pedro, Matheus &amp; Marco</h3>
+              <p>Desenvolvimento, dados e operações</p>
+            </div>
+            <div class="card warm" style="margin-top: 0.8em;">
+              <h3>Adriano Martins · conselheiro</h3>
+              <p>Cinco anos de chão de fábrica no setor de cuidado domiciliar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-foot"><span>09</span> / 10 · TRAÇÃO &amp; TIME</div>
+      <aside class="notes">
+        O que a gente já fez. A gente saiu do PowerPoint: realizou entrevistas em profundidade com o Adriano e mapeou o fluxo real da operação. Com base nisso, modelou o sistema do ponto de vista de dados — entidade Pessoa com três papéis, mais as entidades operacionais — e esse modelo já foi validado contra o caso real. O próximo passo é o piloto, com três empresas em São Luís nos próximos 90 dias.
+
+        O time. Eu sou Arthur Fontinele, curso Engenharia de Software, e estou à frente da modelagem de dados e do produto. Luiz, Pedro, Matheus e Marco cuidam do desenvolvimento e da operação. E temos como conselheiro o próprio Adriano, que traz cinco anos de chão de fábrica do setor — esse conhecimento não está em livro nenhum.
+      </aside>
+    </section>
+
+    <!-- SLIDE 10: ASK -->
+    <section data-background-gradient="radial-gradient(ellipse at 30% 70%, rgba(251,146,60,0.15), transparent 60%), linear-gradient(135deg, #0a0e1a, #134e4a)">
+      <div class="cta">
+        <div class="eyebrow">Pedido</div>
+        <div class="ask"><span class="accent">R$ 250 mil</span><br><span style="font-size: 0.4em; color: var(--ink-1);">em capital semente</span></div>
+        <div class="label">6 meses de desenvolvimento · piloto com 3 empresas</div>
+
+        <div class="grid-3" style="margin-top: 2.5em; max-width: 900px; margin-left: auto; margin-right: auto;">
+          <div class="card fragment fade-up">
+            <h3>Mês 6</h3>
+            <p>MVP em produção · 3 clientes-piloto pagantes em São Luís</p>
+          </div>
+          <div class="card accent fragment fade-up">
+            <h3>Mês 12</h3>
+            <p>30 empresas pagantes · R$ 11 mil de MRR</p>
+          </div>
+          <div class="card fragment fade-up">
+            <h3>Mês 24</h3>
+            <p>Expansão para 3 capitais · 200 empresas · ARR R$ 900 mil</p>
+          </div>
+        </div>
+
+        <h2 style="margin-top: 2.5em; font-size: 1.8em;">
+          Tornar visível um setor que <span class="ul-accent">sustenta o Brasil envelhecido</span>.
+        </h2>
+        <p style="color: var(--ink-2); margin-top: 1em;">arthurfontsbr@gmail.com · São Luís, MA</p>
+      </div>
+      <div class="brand-foot"><span>10</span> / 10 · ASK &amp; VISÃO</div>
+      <aside class="notes">
+        O pedido. A gente busca 250 mil reais em capital semente. Esse investimento cobre seis meses de desenvolvimento e o piloto com três empresas. Em doze meses, a meta é chegar a 30 empresas pagantes e cerca de 11 mil reais de receita recorrente mensal. Mas eu quero fechar com uma frase, não com um número. A CuidarOS não é só um software de gestão. É a primeira camada de visibilidade de um setor que sustenta o Brasil envelhecido e que, até hoje, ninguém estava olhando direito. A gente quer mudar isso. Obrigado.
+      </aside>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    controls: true,
+    progress: true,
+    center: false,
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    slideNumber: false,
+    overview: true,
+    keyboard: true,
+    touch: true,
+    width: 1280,
+    height: 800,
+    margin: 0.06,
+    minScale: 0.2,
+    maxScale: 2.0,
+    plugins: [ RevealNotes, RevealHighlight ]
+  });
+</script>
+
+</body>
+</html>
